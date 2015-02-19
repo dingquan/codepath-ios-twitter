@@ -8,8 +8,16 @@
 
 import UIKit
 
-class NewTweetViewController: UIViewController {
+private let placeHolderText = "What's happing?"
 
+class NewTweetViewController: UIViewController, UITextViewDelegate {
+
+    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var screenName: UILabel!
+    @IBOutlet weak var tweetBody: UITextView!
+    
+    
     @IBAction func onTweet(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -23,6 +31,16 @@ class NewTweetViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        tweetBody.delegate = self
+        tweetBody.text = placeHolderText
+        tweetBody.textColor = UIColor.grayColor()
+        
+        if User.currentUser != nil {
+            name.text = User.currentUser!.name
+            screenName.text = User.currentUser!.screenName
+            ImageHelpers.roundedCorner(profileImage)
+            ImageHelpers.fadeInImage(profileImage, imgUrl: User.currentUser!.profileImageUrl)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,6 +48,23 @@ class NewTweetViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        
+        tweetBody.textColor = UIColor.blackColor()
+        
+        if(self.tweetBody.text == placeHolderText) {
+            self.tweetBody.text = ""
+        }
+        
+        return true
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if(textView.text == "") {
+            tweetBody.text = placeHolderText
+            tweetBody.textColor = UIColor.lightGrayColor()
+        }
+    }
 
     /*
     // MARK: - Navigation

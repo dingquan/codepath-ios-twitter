@@ -41,28 +41,13 @@ class ImageTableViewCell: UITableViewCell {
             } else {
                 self.favoriteIcon.image = UIImage(named: "favorite")
             }
-            self.profileImage.layer.cornerRadius = 5
-            self.profileImage.clipsToBounds = true
-            self.tweetImage.layer.cornerRadius = 5
-            self.tweetImage.clipsToBounds = true
-            fadeInImage(self.profileImage, imgUrl: tweet?.user?.profileImageUrl)
-            fadeInImage(self.tweetImage, imgUrl: tweet?.imageUrl)
+            ImageHelpers.roundedCorner(self.profileImage)
+            ImageHelpers.roundedCorner(self.tweetImage)
+            ImageHelpers.fadeInImage(self.profileImage, imgUrl: tweet?.user?.profileImageUrl)
+            ImageHelpers.fadeInImage(self.tweetImage, imgUrl: tweet?.imageUrl)
         }
     }
     
-    
-    private func fadeInImage(imageView: UIImageView, imgUrl: String?) -> Void {
-        imageView.image = nil
-        var urlReq = NSURLRequest(URL: NSURL(string: imgUrl!)!)
-        imageView.setImageWithURLRequest(urlReq, placeholderImage: nil, success: { (request: NSURLRequest!, response: NSHTTPURLResponse!, image:UIImage!) -> Void in
-                imageView.alpha = 0.0
-                imageView.image = image
-                imageView.sizeToFit()
-                UIView.animateWithDuration(0.25, animations: { imageView.alpha = 1.0})
-            }, failure: { (request:NSURLRequest!, response:NSHTTPURLResponse!, error:NSError!) -> Void in
-                println(error)
-        })
-    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

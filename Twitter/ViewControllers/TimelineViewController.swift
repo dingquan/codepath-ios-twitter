@@ -61,6 +61,15 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         self.performSegueWithIdentifier("showTweetDetails", sender: indexPath)
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showTweetDetails" {
+            var indexPath:NSIndexPath = sender as! NSIndexPath
+            let tweet = self.tweets![indexPath.row]
+            let tweetDetailVC = segue.destinationViewController as! TweetDetailViewController
+            tweetDetailVC.tweet = tweet
+        }
+    }
+    
     /*
     // MARK: - Navigation
 

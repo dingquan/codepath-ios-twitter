@@ -39,9 +39,7 @@ class TextTableViewCell: UITableViewCell {
             } else {
                 self.favoriteIcon.image = UIImage(named: "favorite")
             }
-            self.profileImage.layer.cornerRadius = 5
-            self.profileImage.clipsToBounds = true
-            
+            ImageHelpers.roundedCorner(self.profileImage)
             fadeInImage(self.profileImage, imgUrl: tweet?.user?.profileImageUrl)
         }
     }
