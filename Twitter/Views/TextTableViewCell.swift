@@ -31,6 +31,8 @@ class TextTableViewCell: UITableViewCell {
             self.favoriteCount.sizeToFit()
             self.retweetCount.text = "\(tweet!.retweetCount!)"
             self.retweetCount.sizeToFit()
+            self.createdAt.text = tweet!.createdAt!.shortTimeAgoSinceNow()
+            self.createdAt.sizeToFit()
             if tweet!.favorited! {
                 self.favoriteIcon.image = UIImage(named: "favorite_on")
             } else {
