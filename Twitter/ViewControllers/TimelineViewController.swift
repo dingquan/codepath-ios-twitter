@@ -8,9 +8,10 @@
 
 import UIKit
 
-class TimelineViewController: UIViewController {
+class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var tweets: [Tweet]?
     
+    @IBOutlet weak var tweetsTable: UITableView!
     @IBAction func onLogout(sender: AnyObject) {
         User.currentUser?.logout()
     }
@@ -18,9 +19,13 @@ class TimelineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.tweetsTable.estimatedRowHeight = 200
+        self.tweetsTable.rowHeight = UITableViewAutomaticDimension
+        
         // Do any additional setup after loading the view.
         User.currentUser?.homeTimelineWithCompletion(nil, completion: { (tweets, error) -> () in
             self.tweets = tweets
+            self.tweetsTable.reloadData()
         })
     }
 
@@ -29,7 +34,33 @@ class TimelineViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return (tweets != nil ? tweets!.count : 0)
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var tweet = tweets![indexPath.row]
+        var cell:UITableViewCell
+        if tweet.imageUrl == nil {
+            cell = tableView.dequeueReusableCellWithIdentifier("textCell", forIndexPath: indexPath) as! TextTableViewCell
+            (cell as! TextTableViewCell).tweet = tweet
+        } else {
+            cell = tableView.dequeueReusableCellWithIdentifier("imageCell", forIndexPath: indexPath) as! ImageTableViewCell
+            (cell as! ImageTableViewCell).tweet = tweet
+        }
 
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+        let tweet = self.tweets![indexPath.row]
+        self.performSegueWithIdentifier("showTweetDetails", sender: indexPath)
+    }
+    
     /*
     // MARK: - Navigation
 

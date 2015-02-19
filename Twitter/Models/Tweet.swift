@@ -12,14 +12,36 @@ class Tweet {
     var text:String?
     var createdAt:NSDate?
     var user:User?
+    var retweetCount:Int?
+    var favoriteCount:Int?
+    var favorited:Bool?
+    var imageUrl:String?
     
     init(dictionary: NSDictionary){
         self.text = dictionary["text"] as? String
         self.user = User(dictionary: dictionary["user"] as! NSDictionary)
+        
         var createdAtStr = dictionary["created_at"] as? String
         var dateFormatter:NSDateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
         self.createdAt = dateFormatter.dateFromString(createdAtStr!)
+        
+        self.favorited = dictionary["favorited"] as? Bool
+        self.favoriteCount = dictionary["favorite_count"] as? Int
+        self.retweetCount = dictionary["retweet_count"] as? Int
+        
+        var entities = dictionary["entities"] as? NSDictionary
+        if entities != nil {
+            var media = entities!["media"] as? NSArray
+            if media != nil {
+                for aMedia in media! {
+                    var type = (aMedia as! NSDictionary)["type"] as? NSString
+                    if type == "photo" {
+                        self.imageUrl = (aMedia as! NSDictionary)["media_url"] as? String
+                    }
+                }
+            }
+        }
     }
     
     class func tweetsWithArray(array:[NSDictionary]) -> [Tweet] {
