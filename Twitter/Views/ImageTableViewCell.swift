@@ -28,6 +28,7 @@ class ImageTableViewCell: UITableViewCell {
             self.name.text = user.name!
             self.screenName.text = "@\(user.screenName!)"
             self.tweetBody.text = tweet!.text!
+            self.tweetBody.preferredMaxLayoutWidth = self.tweetBody.frame.size.width
             self.tweetBody.sizeToFit()
             self.favoriteCount.text = "\(tweet!.favoriteCount!)"
             self.favoriteCount.sizeToFit()
