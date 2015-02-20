@@ -18,6 +18,7 @@ class User {
     var screenName: String?
     var profileImageUrl: String?
     var tagLine: String?
+    var id: UInt64?
     var dictionary: NSDictionary
     
     init(dictionary: NSDictionary){
@@ -26,6 +27,7 @@ class User {
         self.screenName = dictionary["screen_name"] as? String
         self.profileImageUrl = dictionary["profile_image_url"] as? String
         self.tagLine = dictionary["description"] as? String
+        self.id = dictionary["id"] as? UInt64
     }
     
     class var currentUser: User? {
@@ -65,9 +67,15 @@ class User {
         })
     }
     
-    func homeTimelineWithCompletion(params: NSDictionary?, completion: (tweets: [Tweet]?, error: NSError?) -> Void){
-        TwitterClient.sharedInstance.homeTimelineWithCompletion(params, completion: { (tweets, error) -> () in
+    func homeTimelineWithCompletion(minId: UInt64?, maxId: UInt64?, completion: (tweets: [Tweet]?, error: NSError?) -> Void){
+        TwitterClient.sharedInstance.homeTimelineWithCompletion(minId, maxId: maxId, completion: { (tweets, error) -> () in
             completion(tweets: tweets, error: error)
+        })
+    }
+    
+    func postTweetWithCompletion(tweetText: String, completion: (tweet: Tweet?, error: NSError?) -> Void){
+        TwitterClient.sharedInstance.postTweet(tweetText, completion: { (tweet, error) -> () in
+            completion(tweet: tweet, error: error)
         })
     }
     

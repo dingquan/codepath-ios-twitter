@@ -17,9 +17,15 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var screenName: UILabel!
     @IBOutlet weak var tweetBody: UITextView!
     
+    var tweet:Tweet?
     
     @IBAction func onTweet(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
+        if tweetBody.text != "" {
+            User.currentUser?.postTweetWithCompletion(tweetBody.text, completion: { (tweet, error) -> () in
+                self.tweet = tweet
+            })
+        }
     }
     
     @IBAction func onCancel(sender: AnyObject) {
@@ -66,6 +72,11 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
         }
     }
 
+    // closes soft keyboard when user taps outside of text view
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        self.view.endEditing(true)
+    }
+    
     /*
     // MARK: - Navigation
 

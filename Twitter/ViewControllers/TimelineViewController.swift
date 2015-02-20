@@ -10,10 +10,20 @@ import UIKit
 
 class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var tweets: [Tweet]?
+    var minId: UInt64!
+    var maxId: UInt64!
+    
+    var refreshControl: UIRefreshControl!
     
     @IBOutlet weak var tweetsTable: UITableView!
     @IBAction func onLogout(sender: AnyObject) {
         User.currentUser?.logout()
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        minId = UINT64_MAX
+        maxId = 1 as UInt64
     }
     
     override func viewDidLoad() {
@@ -22,10 +32,31 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         self.tweetsTable.estimatedRowHeight = 200
         self.tweetsTable.rowHeight = UITableViewAutomaticDimension
         
+        self.tweetsTable.addInfiniteScrollingWithActionHandler({
+            println("infinite scroll triggered")
+            self.fetchMoreTimeline()
+            ();
+        })
+
+        // don't like the SVPullToRefresh's default look
+//        self.tweetsTable.addPullToRefreshWithActionHandler({
+//            println("pull to refresh triggered")
+//            self.refreshTimeline()
+//            ();
+//        })
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: "refreshTimeline", forControlEvents: UIControlEvents.ValueChanged)
+        self.tweetsTable.insertSubview(refreshControl, atIndex: 0)
+        
         // Do any additional setup after loading the view.
-        User.currentUser?.homeTimelineWithCompletion(nil, completion: { (tweets, error) -> () in
-            self.tweets = tweets
-            self.tweetsTable.reloadData()
+        User.currentUser?.homeTimelineWithCompletion(minId, maxId: nil, completion: { (tweets, error) -> () in
+            if tweets != nil {
+                self.tweets = tweets
+                self.tweetsTable.reloadData()
+            } else {
+                println(error)
+            }
         })
     }
 
@@ -67,6 +98,53 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             let tweet = self.tweets![indexPath.row]
             let tweetDetailVC = segue.destinationViewController as! TweetDetailViewController
             tweetDetailVC.tweet = tweet
+        }
+    }
+    
+    private func fetchMoreTimeline() -> Void {
+        findMinMaxId()
+        User.currentUser!.homeTimelineWithCompletion(minId, maxId: nil, completion: { (tweets, error) -> Void in
+            if tweets != nil {
+                self.tweets! += tweets!
+                self.tweetsTable.reloadData()
+            } else {
+                println(error)
+            }
+            self.tweetsTable.infiniteScrollingView.stopAnimating()
+        })
+    }
+    
+    func refreshTimeline() {
+        findMinMaxId()
+        User.currentUser!.homeTimelineWithCompletion(nil, maxId: maxId, completion: { (tweets, error) -> Void in
+            var newTweets = [Tweet]()
+            if tweets != nil {
+                newTweets += tweets!
+                newTweets += self.tweets!
+                self.tweets = newTweets
+                self.tweetsTable.reloadData()
+            } else {
+                println(error)
+            }
+//            self.tweetsTable.pullToRefreshView.stopAnimating()
+            self.refreshControl.endRefreshing()
+        })
+    }
+    
+    private func findMinMaxId() -> Void {
+        self.minId = UINT64_MAX
+        self.maxId = 1 as UInt64
+        
+        if self.tweets != nil {
+            for tweet in tweets! {
+                var uid = tweet.id
+                if uid < minId {
+                    self.minId = uid
+                }
+                if uid > maxId {
+                    self.maxId = uid
+                }
+            }
         }
     }
     

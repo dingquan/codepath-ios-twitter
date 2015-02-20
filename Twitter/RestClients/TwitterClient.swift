@@ -77,7 +77,20 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
             })
     }
     
-    func homeTimelineWithCompletion(params: NSDictionary?, completion: (tweets: [Tweet]?, error: NSError?) -> ()){
+    func homeTimelineWithCompletion(minId: UInt64?, maxId: UInt64?, completion: (tweets: [Tweet]?, error: NSError?) -> ()){
+        var params:NSDictionary = NSMutableDictionary()
+        
+        if (minId != nil) {
+            if (minId != UINT64_MAX) {
+                params.setValue(String(minId! - 1), forKey: "max_id")
+            } else {
+                params.setValue("1", forKey: "since_id")
+            }
+        }
+        if (maxId != nil){
+            params.setValue(String(maxId!), forKey: "since_id")
+        }
+        
         super.GET("1.1/statuses/home_timeline.json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
             println(response)
             var tweets = Tweet.tweetsWithArray(response as! [NSDictionary])
@@ -85,5 +98,22 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
             completion(tweets: nil, error: error)
         })
+    }
+    
+    func postTweet(tweetText: String, completion: (tweet: Tweet?, error: NSError?) -> ()) {
+        var params:NSDictionary = NSMutableDictionary()
+        if tweetText == "" {
+            return
+        }
+        let encodedTweetText = tweetText.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+        params.setValue(encodedTweetText, forKey: "status")
+        super.POST("1.1/statuses/update.json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                println(response)
+                var tweet:Tweet = Tweet(dictionary: response as! NSDictionary)
+                completion(tweet: tweet, error: nil)
+            }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                completion(tweet: nil, error: error)
+        })
+
     }
 }

@@ -636,7 +636,11 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="Title" id="RFb-LH-TyL">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="iOq-t6-WuV"/>
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="iOq-t6-WuV">
+                                            <connections>
+                                                <action selector="onCancel:" destination="6Y6-dD-plv" id="3Ec-Ws-LQv"/>
+                                            </connections>
+                                        </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Tweet" id="apQ-H1-LlD">
                                             <connections>
                                                 <action selector="onTweet:" destination="6Y6-dD-plv" id="f6p-P4-hav"/>
