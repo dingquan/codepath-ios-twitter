@@ -33,6 +33,7 @@ class TweetDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         loadTweet()
     }
 
