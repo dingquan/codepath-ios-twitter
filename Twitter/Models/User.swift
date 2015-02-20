@@ -27,7 +27,7 @@ class User {
         self.screenName = dictionary["screen_name"] as? String
         self.profileImageUrl = dictionary["profile_image_url"] as? String
         self.tagLine = dictionary["description"] as? String
-        self.id = dictionary["id"] as? UInt64
+        self.id = (dictionary["id"] as! NSNumber).unsignedLongLongValue
     }
     
     class var currentUser: User? {

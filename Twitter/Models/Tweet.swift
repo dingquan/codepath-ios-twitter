@@ -21,7 +21,7 @@ class Tweet {
     init(dictionary: NSDictionary){
         self.text = dictionary["text"] as? String
         self.user = User(dictionary: dictionary["user"] as! NSDictionary)
-        self.id = dictionary["id"] as? UInt64
+        self.id = (dictionary["id"] as! NSNumber).unsignedLongLongValue
         
         var createdAtStr = dictionary["created_at"] as? String
         var dateFormatter:NSDateFormatter = NSDateFormatter()
