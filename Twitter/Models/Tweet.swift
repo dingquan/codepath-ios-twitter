@@ -13,6 +13,7 @@ class Tweet {
     var createdAt:NSDate?
     var user:User?
     var retweetCount:Int?
+    var retweeted:Bool?
     var favoriteCount:Int?
     var favorited:Bool?
     var imageUrl:String?
@@ -30,6 +31,7 @@ class Tweet {
         
         self.favorited = dictionary["favorited"] as? Bool
         self.favoriteCount = dictionary["favorite_count"] as? Int
+        self.retweeted = dictionary["retweeted"] as? Bool
         self.retweetCount = dictionary["retweet_count"] as? Int
         
         var entities = dictionary["entities"] as? NSDictionary

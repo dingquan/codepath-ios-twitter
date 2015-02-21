@@ -18,7 +18,9 @@ class TweetDetailViewController: UIViewController {
     @IBOutlet weak var createdAt: UILabel!
     @IBOutlet weak var retweetCnt: UILabel!
     @IBOutlet weak var favoriteCnt: UILabel!
-    @IBOutlet weak var favoriteIcon: UIImageView!
+    @IBOutlet weak var favoriteIcon: UIButton!
+    @IBOutlet weak var replyIcon: UIButton!
+    @IBOutlet weak var retweetIcon: UIButton!
 
     var tweet:Tweet?
     var dateFormatter:NSDateFormatter!
@@ -56,9 +58,15 @@ class TweetDetailViewController: UIViewController {
             createdAt.text = dateFormatter.stringFromDate(tweet.createdAt!)
             
             if tweet.favorited! {
-                self.favoriteIcon.image = UIImage(named: "favorite_on")
+                self.favoriteIcon.setImage(UIImage(named: "favorite_on"), forState: UIControlState.Normal)
             } else {
-                self.favoriteIcon.image = UIImage(named: "favorite")
+                self.favoriteIcon.setImage(UIImage(named: "favorite"), forState: UIControlState.Normal)
+            }
+            
+            if tweet.retweeted! {
+                self.retweetIcon.setImage(UIImage(named: "retweet_on"), forState: UIControlState.Normal)
+            } else {
+                self.retweetIcon.setImage(UIImage(named: "retweet"), forState: UIControlState.Normal)
             }
             
             ImageHelpers.roundedCorner(self.profileImage)
@@ -67,6 +75,55 @@ class TweetDetailViewController: UIViewController {
             if tweet.imageUrl != nil{
                 ImageHelpers.fadeInImage(self.tweetImage, imgUrl: tweet.imageUrl!)
             }
+        }
+    }
+    
+    @IBAction func onReply(sender: AnyObject) {
+//        User.currentUser?.postTweetWithCompletion(self.tweet, tweetText: <#String#>, completion: <#(tweet: Tweet?, error: NSError?) -> Void##(tweet: Tweet?, error: NSError?) -> Void#>)
+    }
+
+
+    @IBAction func onRetweet(sender: AnyObject) {
+        if (self.tweet?.retweeted! == true) {
+            return // can only retweet once
+        }
+        
+        User.currentUser?.reTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
+            if (tweet != nil) {
+                self.tweet = tweet!
+                self.retweetCnt.text = "\(tweet!.retweetCount!)"
+                self.retweetCnt.sizeToFit()
+                self.retweetIcon.setImage(UIImage(named: "retweet_on"), forState: UIControlState.Normal)
+            }
+            else {
+                println(error)
+            }
+        })
+    }
+    
+    @IBAction func onFavorite(sender: AnyObject) {
+        if (tweet!.favorited! == true) {
+            User.currentUser?.unfavoriteTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
+                if (tweet != nil) {
+                    self.tweet = tweet!
+                    self.favoriteIcon.setImage(UIImage(named: "favorite"), forState: UIControlState.Normal)
+                    self.favoriteCnt.text = "\(tweet!.favoriteCount!)"
+                    self.favoriteCnt.sizeToFit()
+                } else {
+                    println(error)
+                }
+            })
+        } else {
+            User.currentUser?.favoriteTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
+                if (tweet != nil) {
+                    self.tweet = tweet!
+                    self.favoriteIcon.setImage(UIImage(named: "favorite_on"), forState: UIControlState.Normal)
+                    self.favoriteCnt.text = "\(tweet!.favoriteCount!)"
+                    self.favoriteCnt.sizeToFit()
+                } else {
+                    println(error)
+                }
+            })
         }
     }
     

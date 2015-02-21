@@ -447,55 +447,73 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vP9-qa-bgh">
                                 <rect key="frame" x="12" y="295" width="74" height="32"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="reply.png" translatesAutoresizingMaskIntoConstraints="NO" id="klV-23-tvc">
-                                        <rect key="frame" x="16" y="8" width="16" height="16"/>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nTo-Yb-zJB">
+                                        <rect key="frame" x="0.0" y="8" width="16" height="16"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="16" id="Eoe-5k-abK"/>
-                                            <constraint firstAttribute="width" constant="16" id="PRt-Ee-8W9"/>
+                                            <constraint firstAttribute="height" constant="16" id="LqC-aY-STh"/>
+                                            <constraint firstAttribute="width" constant="16" id="Xwi-c0-Sup"/>
                                         </constraints>
-                                    </imageView>
+                                        <state key="normal" title="Button" image="reply.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onReply:" destination="Ngi-Qh-ps0" eventType="touchUpInside" id="hdE-vP-Lww"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="klV-23-tvc" firstAttribute="leading" secondItem="vP9-qa-bgh" secondAttribute="leading" constant="16" id="1MV-m0-NRE"/>
+                                    <constraint firstItem="nTo-Yb-zJB" firstAttribute="leading" secondItem="vP9-qa-bgh" secondAttribute="leading" id="FBc-Z3-lKV"/>
                                     <constraint firstAttribute="height" constant="32" id="HmJ-Td-YJT"/>
-                                    <constraint firstAttribute="centerY" secondItem="klV-23-tvc" secondAttribute="centerY" id="k8u-Rc-MZJ"/>
+                                    <constraint firstAttribute="centerY" secondItem="nTo-Yb-zJB" secondAttribute="centerY" id="b2P-sc-T7e"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ek7-NM-cNp">
                                 <rect key="frame" x="86" y="295" width="74" height="32"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="retweet.png" translatesAutoresizingMaskIntoConstraints="NO" id="WFy-iJ-NeD">
-                                        <rect key="frame" x="16" y="8" width="16" height="16"/>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xr9-x8-fN1">
+                                        <rect key="frame" x="0.0" y="8" width="16" height="16"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="16" id="SbP-Zw-NET"/>
-                                            <constraint firstAttribute="height" constant="16" id="rSN-DC-7Rm"/>
+                                            <constraint firstAttribute="height" constant="16" id="13Z-Qi-ZdS"/>
+                                            <constraint firstAttribute="width" constant="16" id="8SX-Uf-mYw"/>
                                         </constraints>
-                                    </imageView>
+                                        <state key="normal" title="Button" image="retweet.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onRetweet:" destination="Ngi-Qh-ps0" eventType="touchUpInside" id="tVy-vA-mPo"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="WFy-iJ-NeD" firstAttribute="leading" secondItem="ek7-NM-cNp" secondAttribute="leading" constant="16" id="7ap-ZU-vsv"/>
-                                    <constraint firstAttribute="centerY" secondItem="WFy-iJ-NeD" secondAttribute="centerY" id="Roo-OQ-98W"/>
+                                    <constraint firstItem="Xr9-x8-fN1" firstAttribute="leading" secondItem="ek7-NM-cNp" secondAttribute="leading" id="WqD-KO-NHp"/>
+                                    <constraint firstAttribute="centerY" secondItem="Xr9-x8-fN1" secondAttribute="centerY" id="c5Y-Df-Vc4"/>
                                     <constraint firstAttribute="height" constant="32" id="iab-Dt-CzN"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a8y-op-MKm">
                                 <rect key="frame" x="160" y="295" width="74" height="32"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="favorite.png" translatesAutoresizingMaskIntoConstraints="NO" id="g1m-Bv-1f4">
-                                        <rect key="frame" x="16" y="8" width="16" height="16"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQZ-fR-cYh">
+                                        <rect key="frame" x="0.0" y="8" width="16" height="16"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="16" id="9tU-sa-y2D"/>
-                                            <constraint firstAttribute="width" constant="16" id="eie-ei-ZbF"/>
+                                            <constraint firstAttribute="width" constant="16" id="4j7-1m-uKR"/>
+                                            <constraint firstAttribute="height" constant="16" id="ilQ-AW-XqS"/>
                                         </constraints>
-                                    </imageView>
+                                        <state key="normal" title="Button" image="favorite.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onFavorite:" destination="Ngi-Qh-ps0" eventType="touchUpInside" id="lUc-if-cnB"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="g1m-Bv-1f4" firstAttribute="leading" secondItem="a8y-op-MKm" secondAttribute="leading" constant="16" id="5oj-oP-I9A"/>
+                                    <constraint firstAttribute="centerY" secondItem="MQZ-fR-cYh" secondAttribute="centerY" id="8lD-Ae-3Aw"/>
                                     <constraint firstAttribute="height" constant="32" id="Bux-A1-0Cu"/>
-                                    <constraint firstAttribute="centerY" secondItem="g1m-Bv-1f4" secondAttribute="centerY" id="u0b-Hi-1jA"/>
+                                    <constraint firstItem="MQZ-fR-cYh" firstAttribute="leading" secondItem="a8y-op-MKm" secondAttribute="leading" id="vlD-wD-u4v"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SbL-4R-BFY">
@@ -606,10 +624,12 @@
                     <connections>
                         <outlet property="createdAt" destination="4Cy-v7-5Vb" id="UcM-BI-6aW"/>
                         <outlet property="favoriteCnt" destination="vww-R2-vyv" id="xcg-iR-Wbt"/>
-                        <outlet property="favoriteIcon" destination="g1m-Bv-1f4" id="uOx-Pn-iN0"/>
+                        <outlet property="favoriteIcon" destination="MQZ-fR-cYh" id="aAe-Cr-vhb"/>
                         <outlet property="name" destination="ayP-Re-2P2" id="56M-f3-tji"/>
                         <outlet property="profileImage" destination="APD-iL-Awc" id="x7H-TP-QY0"/>
+                        <outlet property="replyIcon" destination="nTo-Yb-zJB" id="ufe-V4-CLv"/>
                         <outlet property="retweetCnt" destination="sM2-13-adO" id="gpz-kf-xO9"/>
+                        <outlet property="retweetIcon" destination="Xr9-x8-fN1" id="yAG-aq-uyB"/>
                         <outlet property="screenName" destination="VqY-xm-8JR" id="8wk-H7-CBG"/>
                         <outlet property="tweetBody" destination="TUk-q3-6fu" id="zQe-3a-783"/>
                         <outlet property="tweetImage" destination="YpE-Jm-vGa" id="bh0-x8-TeP"/>

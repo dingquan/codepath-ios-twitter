@@ -73,10 +73,27 @@ class User {
         })
     }
     
-    func postTweetWithCompletion(tweetText: String, completion: (tweet: Tweet?, error: NSError?) -> Void){
-        TwitterClient.sharedInstance.postTweet(tweetText, completion: { (tweet, error) -> () in
+    func postTweetWithCompletion(originalTweet: Tweet?, tweetText: String, completion: (tweet: Tweet?, error: NSError?) -> Void){
+        TwitterClient.sharedInstance.postTweet(originalTweet, tweetText: tweetText, completion: { (tweet, error) -> () in
             completion(tweet: tweet, error: error)
         })
     }
     
+    func favoriteTweetWithCompletion(id: UInt64, completion: (tweet: Tweet?, error: NSError?) -> Void) {
+        TwitterClient.sharedInstance.favoriteTweet(id, completion: { (tweet, error) -> () in
+            completion(tweet: tweet, error: error)
+        })
+    }
+    
+    func unfavoriteTweetWithCompletion(id: UInt64, completion: (tweet: Tweet?, error: NSError?) -> Void) {
+        TwitterClient.sharedInstance.unfavoriteTweet(id, completion: { (tweet, error) -> () in
+            completion(tweet: tweet, error: error)
+        })
+    }
+    
+    func reTweetWithCompletion(id: UInt64, completion: (tweet: Tweet?, error: NSError?) -> Void) {
+        TwitterClient.sharedInstance.reTweet(id, completion: { (tweet, error) -> () in
+            completion(tweet: tweet, error: error)
+        })
+    }
 }

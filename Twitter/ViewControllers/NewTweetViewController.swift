@@ -10,8 +10,6 @@ import UIKit
 
 private let placeHolderText = "What's happing?"
 
-let newTweetCreatedNotification = "NewTweetCreatedNotification"
-
 class NewTweetViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var profileImage: UIImageView!
@@ -22,7 +20,7 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
     @IBAction func onTweet(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
         if tweetBody.text != "" {
-            User.currentUser?.postTweetWithCompletion(tweetBody.text, completion: { (tweet, error) -> () in
+            User.currentUser?.postTweetWithCompletion(nil, tweetText: tweetBody.text, completion: { (tweet, error) -> () in
                 NSNotificationCenter.defaultCenter().postNotificationName(newTweetCreatedNotification, object: tweet)
             })
         }

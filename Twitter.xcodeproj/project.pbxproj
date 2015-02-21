@@ -25,6 +25,7 @@
 		46496FD31A941AAD00F0F24C /* Tweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46496FD21A941AAD00F0F24C /* Tweet.swift */; };
 		46496FD51A941AB700F0F24C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46496FD41A941AB700F0F24C /* User.swift */; };
 		46496FD71A94604200F0F24C /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46496FD61A94604200F0F24C /* TimelineViewController.swift */; };
+		467A1B651A98513D0001674B /* retweet_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 467A1B641A98513D0001674B /* retweet_on.png */; };
 		46F808441A969BEB00604ECD /* ImageHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F808431A969BEB00604ECD /* ImageHelpers.swift */; };
 		BEB772777A390D0D58B204DC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A8FE49EE5A57C587CC639B /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -66,6 +67,7 @@
 		46496FD21A941AAD00F0F24C /* Tweet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tweet.swift; sourceTree = "<group>"; };
 		46496FD41A941AB700F0F24C /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		46496FD61A94604200F0F24C /* TimelineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
+		467A1B641A98513D0001674B /* retweet_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = retweet_on.png; sourceTree = "<group>"; };
 		46F808431A969BEB00604ECD /* ImageHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHelpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -173,6 +175,7 @@
 		462F09251A93F57F00B83744 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				467A1B641A98513D0001674B /* retweet_on.png */,
 				460FFF771A95704600BCBC88 /* favorite_on.png */,
 				4616E6E71A95535200B6B0D7 /* favorite.png */,
 				4616E6E81A95535200B6B0D7 /* reply.png */,
@@ -304,6 +307,7 @@
 				4616E6EB1A95535200B6B0D7 /* reply.png in Resources */,
 				462F090E1A93E56D00B83744 /* LaunchScreen.xib in Resources */,
 				462F090B1A93E56D00B83744 /* Images.xcassets in Resources */,
+				467A1B651A98513D0001674B /* retweet_on.png in Resources */,
 				4616E6EC1A95535200B6B0D7 /* retweet.png in Resources */,
 				4616E6EA1A95535200B6B0D7 /* favorite.png in Resources */,
 			);

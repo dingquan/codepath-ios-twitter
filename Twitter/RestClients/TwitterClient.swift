@@ -13,6 +13,11 @@ private let TwitterConsumerSecret = "5PbpQpKyEwbBPDOQBYIV1cT66dDZoYrcOzBt6IQMwyb
 private let TwitterApiBaseUrl = "https://api.twitter.com"
 private let _singletonInstance = TwitterClient()
 
+let newTweetCreatedNotification = "NewTweetCreatedNotification"
+let favoritedTweetNotification = "FavoritedTweetNotificatin"
+let unfavoritedTweetNotification = "UnfavoritedTweetNotification"
+let retweetedNotification = "RetweetedNotification"
+
 class TwitterClient: BDBOAuth1RequestOperationManager {
     class var sharedInstance :TwitterClient {
         return _singletonInstance
@@ -100,14 +105,19 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         })
     }
     
-    func postTweet(tweetText: String, completion: (tweet: Tweet?, error: NSError?) -> ()) {
+    func postTweet(originalTweet: Tweet?, tweetText: String?, completion: (tweet: Tweet?, error: NSError?) -> ()) {
         var params:NSDictionary = NSMutableDictionary()
-        if tweetText == "" {
+        if tweetText == nil {
             return
         }
-//        let encodedTweetText = tweetText.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
-        let encodedTweetText = tweetText.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        params.setValue(tweetText, forKey: "status")
+
+        // handle the reply tweet case
+        var newTweetText = (originalTweet == nil ? tweetText : "@\(originalTweet!.user!.name!) \(tweetText)")
+        params.setValue(newTweetText, forKey: "status")
+        if (originalTweet != nil) {
+            params.setValue(String(originalTweet!.id!), forKey: "in_reply_to_status_id")
+        }
+        
         super.POST("1.1/statuses/update.json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
                 println(response)
                 var tweet:Tweet = Tweet(dictionary: response as! NSDictionary)
@@ -115,6 +125,41 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
             }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 completion(tweet: nil, error: error)
         })
-
+    }
+    
+    func favoriteTweet(id: UInt64, completion: (tweet: Tweet?, error: NSError?) -> ()) {
+        var params:NSDictionary = NSMutableDictionary()
+        params.setValue(String(id), forKey: "id")
+        super.POST("1.1/favorites/create.json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                println(response)
+                var tweet:Tweet = Tweet(dictionary: response as! NSDictionary)
+                completion(tweet: tweet, error: nil)
+            }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                completion(tweet: nil, error: error)
+        })
+    }
+    
+    func unfavoriteTweet(id: UInt64, completion: (tweet: Tweet?, error: NSError?) -> ()) {
+        var params:NSDictionary = NSMutableDictionary()
+        params.setValue(String(id), forKey: "id")
+        super.POST("1.1/favorites/destroy.json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+            println(response)
+            var tweet:Tweet = Tweet(dictionary: response as! NSDictionary)
+            completion(tweet: tweet, error: nil)
+            }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                completion(tweet: nil, error: error)
+        })
+    }
+    
+    func reTweet(id: UInt64, completion: (tweet: Tweet?, error: NSError?) -> ()) {
+        var params:NSDictionary = NSMutableDictionary()
+        params.setValue(String(id), forKey: "id")
+        super.POST("1.1/statuses/retweet/\(id).json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+            println(response)
+            var tweet:Tweet = Tweet(dictionary: response as! NSDictionary)
+            completion(tweet: tweet, error: nil)
+            }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                completion(tweet: nil, error: error)
+        })
     }
 }
