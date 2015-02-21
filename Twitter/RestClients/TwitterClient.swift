@@ -92,7 +92,7 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         }
         
         super.GET("1.1/statuses/home_timeline.json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-            println(response)
+//            println(response)
             var tweets = Tweet.tweetsWithArray(response as! [NSDictionary])
             completion(tweets: tweets, error: nil)
         }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
@@ -105,8 +105,9 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         if tweetText == "" {
             return
         }
+//        let encodedTweetText = tweetText.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)
         let encodedTweetText = tweetText.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        params.setValue(encodedTweetText, forKey: "status")
+        params.setValue(tweetText, forKey: "status")
         super.POST("1.1/statuses/update.json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
                 println(response)
                 var tweet:Tweet = Tweet(dictionary: response as! NSDictionary)

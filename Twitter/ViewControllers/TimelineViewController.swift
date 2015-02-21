@@ -9,11 +9,19 @@
 import UIKit
 
 class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    var tweets: [Tweet]?
+    var tweets: [Tweet]!
     var minId: UInt64!
     var maxId: UInt64!
     
     var refreshControl: UIRefreshControl!
+    var tweet: Tweet? { // to hold the newly composed tweet from NewTweetViewController
+        didSet {
+            if (tweet != nil) {
+                tweets.insert(tweet!, atIndex: 0)
+                self.tweetsTable.reloadData()
+            }
+        }
+    }
     
     @IBOutlet weak var tweetsTable: UITableView!
     @IBAction func onLogout(sender: AnyObject) {
@@ -24,11 +32,14 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         super.init(coder: aDecoder)
         minId = UINT64_MAX
         maxId = 1 as UInt64
+        tweets = [Tweet]()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTweetTableWithNewTweet:", name: newTweetCreatedNotification, object: nil)
+        
         self.tweetsTable.estimatedRowHeight = 200
         self.tweetsTable.rowHeight = UITableViewAutomaticDimension
         
@@ -70,7 +81,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (tweets != nil ? tweets!.count : 0)
+        return tweets.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -88,14 +99,14 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
-        let tweet = self.tweets![indexPath.row]
+        let tweet = self.tweets[indexPath.row]
         self.performSegueWithIdentifier("showTweetDetails", sender: indexPath)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showTweetDetails" {
             var indexPath:NSIndexPath = sender as! NSIndexPath
-            let tweet = self.tweets![indexPath.row]
+            let tweet = self.tweets[indexPath.row]
             let tweetDetailVC = segue.destinationViewController as! TweetDetailViewController
             tweetDetailVC.tweet = tweet
         }
@@ -145,6 +156,14 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.maxId = uid
                 }
             }
+        }
+    }
+    
+    func updateTweetTableWithNewTweet(notification: NSNotification){
+        let tweet = notification.object
+        if ((tweet?.isKindOfClass(Tweet) != nil)){
+            tweets.insert(tweet! as! Tweet, atIndex: 0)
+            self.tweetsTable.reloadData()
         }
     }
     
