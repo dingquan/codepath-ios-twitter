@@ -37,6 +37,7 @@ class TweetDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.Black
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         loadTweet()
     }
@@ -79,7 +80,6 @@ class TweetDetailViewController: UIViewController {
             }
         }
     }
-    
     
     @IBAction func onRetweet(sender: AnyObject) {
         var oldRetweetCount = self.tweet!.retweetCount!

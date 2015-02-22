@@ -64,6 +64,10 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
         self.navItems.rightBarButtonItems?.append(tweetCountBarItem)
     }
 
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.Default
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

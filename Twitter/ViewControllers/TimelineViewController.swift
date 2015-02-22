@@ -38,6 +38,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.Black
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTweetTableWithNewTweet:", name: newTweetCreatedNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTweetTableWithTweet:", name: tweetUpdatedNotification, object: nil)
@@ -72,7 +74,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         })
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
