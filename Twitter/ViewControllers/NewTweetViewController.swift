@@ -12,6 +12,8 @@ private let placeHolderText = "What's happing?"
 
 class NewTweetViewController: UIViewController, UITextViewDelegate {
 
+    var inReplyToTweet: Tweet?
+    
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var screenName: UILabel!
@@ -20,7 +22,7 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
     @IBAction func onTweet(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
         if tweetBody.text != "" {
-            User.currentUser?.postTweetWithCompletion(nil, tweetText: tweetBody.text, completion: { (tweet, error) -> () in
+            User.currentUser?.postTweetWithCompletion(inReplyToTweet, tweetText: tweetBody.text, completion: { (tweet, error) -> () in
                 NSNotificationCenter.defaultCenter().postNotificationName(newTweetCreatedNotification, object: tweet)
             })
         }
@@ -36,7 +38,12 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
 
         // Do any additional setup after loading the view.
         tweetBody.delegate = self
-        tweetBody.text = placeHolderText
+        if inReplyToTweet == nil {
+            tweetBody.text = placeHolderText
+        } else {
+            tweetBody.text = "@\(inReplyToTweet!.user!.screenName!) "
+            tweetBody.selectedRange = NSRange(location: tweetBody!.text!.utf16Count, length: 0)
+        }
         tweetBody.textColor = UIColor.grayColor()
         
         if User.currentUser != nil {

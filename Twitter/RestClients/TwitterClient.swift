@@ -112,8 +112,9 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
         }
 
         // handle the reply tweet case
-        var newTweetText = (originalTweet == nil ? tweetText : "@\(originalTweet!.user!.name!) \(tweetText)")
-        params.setValue(newTweetText, forKey: "status")
+//        var newTweetText = (originalTweet == nil ? tweetText : "@\(originalTweet!.user!.name!) \(tweetText)")
+//        params.setValue(newTweetText, forKey: "status")
+        params.setValue(tweetText, forKey: "status")
         if (originalTweet != nil) {
             params.setValue(String(originalTweet!.id!), forKey: "in_reply_to_status_id")
         }

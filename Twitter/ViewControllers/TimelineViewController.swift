@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TweetTableViewCellDelegate {
     var tweets: [Tweet]!
     var minId: UInt64!
     var maxId: UInt64!
@@ -40,7 +40,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTweetTableWithNewTweet:", name: newTweetCreatedNotification, object: nil)
         
-        self.tweetsTable.estimatedRowHeight = 200
+        self.tweetsTable.estimatedRowHeight = 260
         self.tweetsTable.rowHeight = UITableViewAutomaticDimension
         
         self.tweetsTable.addInfiniteScrollingWithActionHandler({
@@ -90,11 +90,26 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         if tweet.imageUrl == nil {
             cell = tableView.dequeueReusableCellWithIdentifier("textCell", forIndexPath: indexPath) as! TextTableViewCell
             (cell as! TextTableViewCell).tweet = tweet
+            (cell as! TextTableViewCell).delegate = self
         } else {
             cell = tableView.dequeueReusableCellWithIdentifier("imageCell", forIndexPath: indexPath) as! ImageTableViewCell
             (cell as! ImageTableViewCell).tweet = tweet
+            (cell as! ImageTableViewCell).delegate = self
         }
 
+        // change the default margin of the table divider length
+        if (cell.respondsToSelector(Selector("setPreservesSuperviewLayoutMargins:"))){
+            cell.preservesSuperviewLayoutMargins = false
+        }
+        
+        if (cell.respondsToSelector(Selector("setSeparatorInset:"))){
+            cell.separatorInset = UIEdgeInsetsMake(0, 4, 0, 0)
+        }
+        
+        if (cell.respondsToSelector(Selector("setLayoutMargins:"))){
+            cell.layoutMargins = UIEdgeInsetsZero
+        }
+        
         return cell
     }
     
@@ -109,6 +124,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             let tweet = self.tweets[indexPath.row]
             let tweetDetailVC = segue.destinationViewController as! TweetDetailViewController
             tweetDetailVC.tweet = tweet
+        } else if segue.identifier == "replyTweetFromTimeline" {
+            let newTweetVC = segue.destinationViewController as! NewTweetViewController
+            newTweetVC.inReplyToTweet = sender as? Tweet
         }
     }
     
@@ -165,6 +183,10 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             tweets.insert(tweet! as! Tweet, atIndex: 0)
             self.tweetsTable.reloadData()
         }
+    }
+    
+    func replyTweetFromTableViewCell(tweet: Tweet) {
+        self.performSegueWithIdentifier("replyTweetFromTimeline", sender: tweet)
     }
     
     /*

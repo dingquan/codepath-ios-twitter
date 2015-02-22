@@ -78,11 +78,6 @@ class TweetDetailViewController: UIViewController {
         }
     }
     
-    @IBAction func onReply(sender: AnyObject) {
-//        User.currentUser?.postTweetWithCompletion(self.tweet, tweetText: <#String#>, completion: <#(tweet: Tweet?, error: NSError?) -> Void##(tweet: Tweet?, error: NSError?) -> Void#>)
-    }
-
-
     @IBAction func onRetweet(sender: AnyObject) {
         if (self.tweet?.retweeted! == true) {
             return // can only retweet once
@@ -124,6 +119,13 @@ class TweetDetailViewController: UIViewController {
                     println(error)
                 }
             })
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "replyTweetFromDetailsView" {
+            let newTweetVC = segue.destinationViewController as! NewTweetViewController
+            newTweetVC.inReplyToTweet = self.tweet
         }
     }
     
