@@ -8,12 +8,14 @@
 
 import UIKit
 
-private let placeHolderText = "What's happing?"
+private let placeHolderText = "What's happening?"
 
 class NewTweetViewController: UIViewController, UITextViewDelegate {
 
     var inReplyToTweet: Tweet?
+    var tweetCountBarItem: UIBarButtonItem!
     
+    @IBOutlet weak var navItems: UINavigationItem!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var screenName: UILabel!
@@ -32,6 +34,10 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        tweetCountBarItem = UIBarButtonItem()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +58,10 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
             ImageHelpers.roundedCorner(profileImage)
             ImageHelpers.fadeInImage(profileImage, imgUrl: User.currentUser!.profileImageUrl)
         }
+        
+        tweetCountBarItem.title = "140"
+        tweetCountBarItem.tintColor = UIColor.grayColor()
+        self.navItems.rightBarButtonItems?.append(tweetCountBarItem)
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,6 +85,17 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
             tweetBody.text = placeHolderText
             tweetBody.textColor = UIColor.lightGrayColor()
         }
+    }
+    
+    func textViewDidChange(textView: UITextView) {
+        let remaining = 140 - tweetBody.text.utf16Count
+        if remaining < 20 {
+            tweetCountBarItem.tintColor = UIColor.redColor()
+        }
+        else {
+            tweetCountBarItem.tintColor = UIColor.grayColor()
+        }
+        tweetCountBarItem.title = String(remaining)
     }
 
     // closes soft keyboard when user taps outside of text view

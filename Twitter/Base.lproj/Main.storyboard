@@ -703,13 +703,13 @@
                                 </constraints>
                                 <items>
                                     <navigationItem id="RFb-LH-TyL">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="iOq-t6-WuV">
+                                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="iOq-t6-WuV">
                                             <color key="tintColor" red="0.18108852180000001" green="0.70078391380000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
                                                 <action selector="onCancel:" destination="6Y6-dD-plv" id="3Ec-Ws-LQv"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Tweet" id="apQ-H1-LlD">
+                                        <barButtonItem key="rightBarButtonItem" title="Tweet" style="plain" id="apQ-H1-LlD">
                                             <color key="tintColor" red="0.18108852180000001" green="0.70078391380000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
                                                 <action selector="onTweet:" destination="6Y6-dD-plv" id="f6p-P4-hav"/>
@@ -767,6 +767,7 @@
                     <navigationItem key="navigationItem" id="R4a-KF-sfZ"/>
                     <connections>
                         <outlet property="name" destination="E6Q-V7-ab1" id="cGc-cg-hNm"/>
+                        <outlet property="navItems" destination="RFb-LH-TyL" id="4pc-TS-7Vj"/>
                         <outlet property="profileImage" destination="udN-AA-au9" id="tAM-6t-BJu"/>
                         <outlet property="screenName" destination="taR-2J-iEf" id="ZaZ-4n-CPx"/>
                         <outlet property="tweetBody" destination="XQq-Nw-kwJ" id="DFz-HJ-TLd"/>
