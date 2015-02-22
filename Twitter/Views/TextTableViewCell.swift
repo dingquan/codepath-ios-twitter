@@ -10,6 +10,7 @@ import UIKit
 
 protocol TweetTableViewCellDelegate : class {
     func replyTweetFromTableViewCell(tweet: Tweet)
+    func tweetUpdated(tweet: Tweet, forCell: UITableViewCell)
 }
 
 class TextTableViewCell: UITableViewCell {
@@ -28,6 +29,8 @@ class TextTableViewCell: UITableViewCell {
     @IBOutlet weak var retweetIcon: UIButton!
     @IBOutlet weak var favoriteIcon: UIButton!
     
+    var retweet: Tweet?
+
     var tweet:Tweet? {
         didSet {
             var user:User = tweet!.user!
@@ -86,31 +89,57 @@ class TextTableViewCell: UITableViewCell {
     }
     
     @IBAction func onRetweet(sender: AnyObject) {
+        var oldRetweetCount = self.tweet!.retweetCount!
         if (self.tweet?.retweeted! == true) {
-            return // can only retweet once
+            User.currentUser?.deleteTweetWithCompletion(self.retweet!.id!, completion: { (tweet, error) -> Void in
+                if (tweet != nil) {
+                    if oldRetweetCount == tweet!.retweetCount! {
+                        tweet!.retweetCount!--
+                    }
+                    self.retweet = tweet!
+                    self.tweet!.retweetCount = tweet!.retweetCount!
+                    self.tweet!.retweeted = tweet!.retweeted!
+                    self.retweetCount.text = "\(tweet!.retweetCount!)"
+                    self.retweetCount.sizeToFit()
+                    self.retweetIcon.setImage(UIImage(named: "retweet"), forState: UIControlState.Normal)
+                }
+                else {
+                    println(error)
+                }
+            })
+        } else {
+            User.currentUser?.reTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
+                if (tweet != nil) {
+                    if oldRetweetCount == tweet!.retweetCount! {
+                        tweet!.retweetCount!++
+                    }
+                    self.retweet = tweet!
+                    self.tweet!.retweetCount = tweet!.retweetCount!
+                    self.tweet!.retweeted = tweet!.retweeted!
+                    self.retweetCount.text = "\(tweet!.retweetCount!)"
+                    self.retweetCount.sizeToFit()
+                    self.retweetIcon.setImage(UIImage(named: "retweet_on"), forState: UIControlState.Normal)
+                }
+                else {
+                    println(error)
+                }
+            })
         }
-        
-        User.currentUser?.reTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
-            if (tweet != nil) {
-                self.tweet = tweet!
-                self.retweetCount.text = "\(tweet!.retweetCount!)"
-                self.retweetCount.sizeToFit()
-                self.retweetIcon.setImage(UIImage(named: "retweet_on"), forState: UIControlState.Normal)
-            }
-            else {
-                println(error)
-            }
-        })
     }
 
     @IBAction func onFavorite(sender: AnyObject) {
+        var oldFavCount = self.tweet!.favoriteCount!
         if (tweet!.favorited! == true) {
             User.currentUser?.unfavoriteTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
                 if (tweet != nil) {
+                    if oldFavCount == tweet!.favoriteCount! {
+                        tweet!.favoriteCount!--
+                    }
                     self.tweet = tweet!
                     self.favoriteIcon.setImage(UIImage(named: "favorite"), forState: UIControlState.Normal)
                     self.favoriteCount.text = "\(tweet!.favoriteCount!)"
                     self.favoriteCount.sizeToFit()
+                    self.delegate?.tweetUpdated(tweet!, forCell: self)
                 } else {
                     println(error)
                 }
@@ -118,10 +147,14 @@ class TextTableViewCell: UITableViewCell {
         } else {
             User.currentUser?.favoriteTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
                 if (tweet != nil) {
+                    if oldFavCount == tweet!.favoriteCount! {
+                        tweet!.favoriteCount!++
+                    }
                     self.tweet = tweet!
                     self.favoriteIcon.setImage(UIImage(named: "favorite_on"), forState: UIControlState.Normal)
                     self.favoriteCount.text = "\(tweet!.favoriteCount!)"
                     self.favoriteCount.sizeToFit()
+                    self.delegate?.tweetUpdated(tweet!, forCell: self)
                 } else {
                     println(error)
                 }

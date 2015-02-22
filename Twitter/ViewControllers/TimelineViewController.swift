@@ -40,6 +40,8 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTweetTableWithNewTweet:", name: newTweetCreatedNotification, object: nil)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTweetTableWithTweet:", name: tweetUpdatedNotification, object: nil)
+        
         self.tweetsTable.estimatedRowHeight = 260
         self.tweetsTable.rowHeight = UITableViewAutomaticDimension
         
@@ -124,6 +126,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
             let tweet = self.tweets[indexPath.row]
             let tweetDetailVC = segue.destinationViewController as! TweetDetailViewController
             tweetDetailVC.tweet = tweet
+            tweetDetailVC.forIndexPath = indexPath
         } else if segue.identifier == "replyTweetFromTimeline" {
             let newTweetVC = segue.destinationViewController as! NewTweetViewController
             newTweetVC.inReplyToTweet = sender as? Tweet
@@ -185,8 +188,22 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    func updateTweetTableWithTweet(notification: NSNotification){
+        let obj = (notification.object as! NSDictionary)
+        let tweet = obj["tweet"] as! Tweet
+        let indexPath = obj["indexPath"] as! NSIndexPath
+        self.tweets[indexPath.row] = tweet
+        self.tweetsTable.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+    }
+    
     func replyTweetFromTableViewCell(tweet: Tweet) {
         self.performSegueWithIdentifier("replyTweetFromTimeline", sender: tweet)
+    }
+    
+    func tweetUpdated(tweet: Tweet, forCell: UITableViewCell) {
+        let indexPath:NSIndexPath = self.tweetsTable.indexPathForCell(forCell)!
+        self.tweets[indexPath.row] = tweet
+        self.tweetsTable.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
     }
     
     /*

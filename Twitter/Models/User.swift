@@ -96,4 +96,10 @@ class User {
             completion(tweet: tweet, error: error)
         })
     }
+    
+    func deleteTweetWithCompletion(id: UInt64, completion: (tweet: Tweet?, error: NSError?) -> Void) {
+        TwitterClient.sharedInstance.deleteTweet(id, completion: { (tweet, error) -> () in
+            completion(tweet: tweet, error: error)
+        })
+    }
 }

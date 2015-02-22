@@ -23,7 +23,9 @@ class TweetDetailViewController: UIViewController {
     @IBOutlet weak var retweetIcon: UIButton!
 
     var tweet:Tweet?
+    var forIndexPath: NSIndexPath?
     var dateFormatter:NSDateFormatter!
+    var retweet:Tweet?
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -38,7 +40,7 @@ class TweetDetailViewController: UIViewController {
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         loadTweet()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -78,32 +80,61 @@ class TweetDetailViewController: UIViewController {
         }
     }
     
+    
     @IBAction func onRetweet(sender: AnyObject) {
+        var oldRetweetCount = self.tweet!.retweetCount!
         if (self.tweet?.retweeted! == true) {
-            return // can only retweet once
+            User.currentUser?.deleteTweetWithCompletion(self.retweet!.id!, completion: { (tweet, error) -> Void in
+                if (tweet != nil) {
+                    if oldRetweetCount == tweet!.retweetCount! {
+                        tweet!.retweetCount!--
+                    }
+                    self.retweet = tweet!
+                    self.tweet!.retweetCount = tweet!.retweetCount!
+                    self.tweet!.retweeted = tweet!.retweeted!
+                    self.retweetCnt.text = "\(tweet!.retweetCount!)"
+                    self.retweetCnt.sizeToFit()
+                    self.retweetIcon.setImage(UIImage(named: "retweet"), forState: UIControlState.Normal)
+                    self.sendTweetUpdatedNotification()
+                }
+                else {
+                    println(error)
+                }
+            })
+        } else {
+            User.currentUser?.reTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
+                if (tweet != nil) {
+                    if oldRetweetCount == tweet!.retweetCount! {
+                        tweet!.retweetCount!++
+                    }
+                    self.retweet = tweet!
+                    self.tweet!.retweetCount = tweet!.retweetCount!
+                    self.tweet!.retweeted = tweet!.retweeted!
+                    self.retweetCnt.text = "\(tweet!.retweetCount!)"
+                    self.retweetCnt.sizeToFit()
+                    self.retweetIcon.setImage(UIImage(named: "retweet_on"), forState: UIControlState.Normal)
+                    self.sendTweetUpdatedNotification()
+                }
+                else {
+                    println(error)
+                }
+            })
         }
-        
-        User.currentUser?.reTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
-            if (tweet != nil) {
-                self.tweet = tweet!
-                self.retweetCnt.text = "\(tweet!.retweetCount!)"
-                self.retweetCnt.sizeToFit()
-                self.retweetIcon.setImage(UIImage(named: "retweet_on"), forState: UIControlState.Normal)
-            }
-            else {
-                println(error)
-            }
-        })
     }
     
     @IBAction func onFavorite(sender: AnyObject) {
+        var oldFavCount = self.tweet!.favoriteCount!
         if (tweet!.favorited! == true) {
             User.currentUser?.unfavoriteTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
                 if (tweet != nil) {
+                    if oldFavCount == tweet!.favoriteCount! {
+                        tweet!.favoriteCount!--
+                    }
                     self.tweet = tweet!
                     self.favoriteIcon.setImage(UIImage(named: "favorite"), forState: UIControlState.Normal)
                     self.favoriteCnt.text = "\(tweet!.favoriteCount!)"
                     self.favoriteCnt.sizeToFit()
+                    self.sendTweetUpdatedNotification()
                 } else {
                     println(error)
                 }
@@ -111,10 +142,14 @@ class TweetDetailViewController: UIViewController {
         } else {
             User.currentUser?.favoriteTweetWithCompletion(self.tweet!.id!, completion: { (tweet, error) -> Void in
                 if (tweet != nil) {
+                    if oldFavCount == tweet!.favoriteCount! {
+                        tweet!.favoriteCount!++
+                    }
                     self.tweet = tweet!
                     self.favoriteIcon.setImage(UIImage(named: "favorite_on"), forState: UIControlState.Normal)
                     self.favoriteCnt.text = "\(tweet!.favoriteCount!)"
                     self.favoriteCnt.sizeToFit()
+                    self.sendTweetUpdatedNotification()
                 } else {
                     println(error)
                 }
@@ -127,6 +162,13 @@ class TweetDetailViewController: UIViewController {
             let newTweetVC = segue.destinationViewController as! NewTweetViewController
             newTweetVC.inReplyToTweet = self.tweet
         }
+    }
+    
+    private func sendTweetUpdatedNotification() {
+        let tweetDetails:NSMutableDictionary = NSMutableDictionary()
+        tweetDetails.setValue(self.tweet, forKey: "tweet")
+        tweetDetails.setValue(self.forIndexPath, forKey: "indexPath")
+        NSNotificationCenter.defaultCenter().postNotificationName(tweetUpdatedNotification, object: tweetDetails)
     }
     
     /*

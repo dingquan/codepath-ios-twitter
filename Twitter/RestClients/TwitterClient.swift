@@ -14,9 +14,7 @@ private let TwitterApiBaseUrl = "https://api.twitter.com"
 private let _singletonInstance = TwitterClient()
 
 let newTweetCreatedNotification = "NewTweetCreatedNotification"
-let favoritedTweetNotification = "FavoritedTweetNotificatin"
-let unfavoritedTweetNotification = "UnfavoritedTweetNotification"
-let retweetedNotification = "RetweetedNotification"
+let tweetUpdatedNotification = "TweetUpdatedNotification"
 
 class TwitterClient: BDBOAuth1RequestOperationManager {
     class var sharedInstance :TwitterClient {
@@ -163,4 +161,17 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
                 completion(tweet: nil, error: error)
         })
     }
+    
+    func deleteTweet(id: UInt64, completion: (tweet: Tweet?, error: NSError?) -> ()) {
+        var params:NSDictionary = NSMutableDictionary()
+        params.setValue(String(id), forKey: "id")
+        super.POST("1.1/statuses/destroy/\(id).json", parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+            println(response)
+            var tweet:Tweet = Tweet(dictionary: response as! NSDictionary)
+            completion(tweet: tweet, error: nil)
+            }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                completion(tweet: nil, error: error)
+        })
+    }
+
 }

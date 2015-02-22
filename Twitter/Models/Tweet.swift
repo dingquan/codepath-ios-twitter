@@ -14,6 +14,7 @@ class Tweet {
     var user:User?
     var retweetCount:Int?
     var retweeted:Bool?
+    var retweetId:UInt64?
     var favoriteCount:Int?
     var favorited:Bool?
     var imageUrl:String?
