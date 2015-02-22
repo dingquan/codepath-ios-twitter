@@ -38,6 +38,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.barStyle = UIBarStyle.Black
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTweetTableWithNewTweet:", name: newTweetCreatedNotification, object: nil)
