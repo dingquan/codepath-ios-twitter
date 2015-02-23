@@ -93,6 +93,7 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
     
     func textViewDidChange(textView: UITextView) {
         let remaining = 140 - tweetBody.text.utf16Count
+        UIView.setAnimationsEnabled(false)
         if remaining < 20 {
             tweetCountBarItem.tintColor = UIColor.redColor()
         }
@@ -100,6 +101,7 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
             tweetCountBarItem.tintColor = UIColor.grayColor()
         }
         tweetCountBarItem.title = String(remaining)
+        UIView.setAnimationsEnabled(true)
     }
 
     // closes soft keyboard when user taps outside of text view
