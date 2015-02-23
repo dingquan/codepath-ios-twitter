@@ -56,7 +56,9 @@ class TextTableViewCell: UITableViewCell {
                 self.retweetIcon.setImage(UIImage(named: "retweet"), forState: UIControlState.Normal)
             }
             ImageHelpers.roundedCorner(self.profileImage)
-            fadeInImage(self.profileImage, imgUrl: tweet?.user?.profileImageUrl)
+            if tweet?.user?.profileImageUrl! != oldValue?.user?.profileImageUrl! {
+                fadeInImage(self.profileImage, imgUrl: tweet?.user?.profileImageUrl)
+            }
         }
     }
     

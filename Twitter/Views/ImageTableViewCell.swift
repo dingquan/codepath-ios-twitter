@@ -51,8 +51,12 @@ class ImageTableViewCell: UITableViewCell {
             }
             ImageHelpers.roundedCorner(self.profileImage)
             ImageHelpers.roundedCorner(self.tweetImage)
-            ImageHelpers.fadeInImage(self.profileImage, imgUrl: tweet?.user?.profileImageUrl)
-            ImageHelpers.fadeInImage(self.tweetImage, imgUrl: tweet?.imageUrl)
+            if tweet?.user?.profileImageUrl! != oldValue?.user?.profileImageUrl! {
+                ImageHelpers.fadeInImage(self.profileImage, imgUrl: tweet?.user?.profileImageUrl)
+            }
+            if tweet?.imageUrl! != oldValue?.imageUrl! {
+                ImageHelpers.fadeInImage(self.tweetImage, imgUrl: tweet?.imageUrl)
+            }
         }
     }
     
