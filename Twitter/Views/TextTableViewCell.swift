@@ -13,7 +13,7 @@ protocol TweetTableViewCellDelegate : class {
     func tweetUpdated(tweet: Tweet, forCell: UITableViewCell)
 }
 
-class TextTableViewCell: UITableViewCell {
+class TextTableViewCell: UITableViewCell, TTTAttributedLabelDelegate {
     weak var delegate: TweetTableViewCellDelegate?
 
     @IBOutlet weak var profileImage: UIImageView!
@@ -78,6 +78,8 @@ class TextTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         self.selectionStyle = UITableViewCellSelectionStyle.None
+        self.tweetBody.delegate = self
+        self.tweetBody.enabledTextCheckingTypes = NSTextCheckingType.Link.rawValue
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -162,5 +164,9 @@ class TextTableViewCell: UITableViewCell {
                 }
             })
         }
+    }
+    
+    func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
+        UIApplication.sharedApplication().openURL(url)
     }
 }

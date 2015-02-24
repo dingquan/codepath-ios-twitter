@@ -177,6 +177,10 @@ class TweetDetailViewController: UIViewController, TTTAttributedLabelDelegate {
         NSNotificationCenter.defaultCenter().postNotificationName(tweetUpdatedNotification, object: tweetDetails)
     }
     
+    func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
+        UIApplication.sharedApplication().openURL(url)
+    }
+    
     /*
     // MARK: - Navigation
 

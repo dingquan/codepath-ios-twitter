@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageTableViewCell: UITableViewCell {
+class ImageTableViewCell: UITableViewCell, TTTAttributedLabelDelegate {
     weak var delegate: TweetTableViewCellDelegate?
 
     @IBOutlet weak var profileImage: UIImageView!
@@ -66,6 +66,8 @@ class ImageTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         self.selectionStyle = UITableViewCellSelectionStyle.None
+        self.tweetBody.delegate = self
+        self.tweetBody.enabledTextCheckingTypes = NSTextCheckingType.Link.rawValue
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -150,6 +152,10 @@ class ImageTableViewCell: UITableViewCell {
                 }
             })
         }
+    }
+    
+    func attributedLabel(label: TTTAttributedLabel!, didSelectLinkWithURL url: NSURL!) {
+        UIApplication.sharedApplication().openURL(url)
     }
     
 }
