@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TweetTableViewCellDelegate {
+class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TweetTableViewCellDelegate, TTTAttributedLabelDelegate {
     var tweets: [Tweet]!
     var minId: UInt64!
     var maxId: UInt64!
@@ -94,12 +94,14 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
         var cell:UITableViewCell
         if tweet.imageUrl == nil {
             cell = tableView.dequeueReusableCellWithIdentifier("textCell", forIndexPath: indexPath) as! TextTableViewCell
-            (cell as! TextTableViewCell).tweet = tweet
+            (cell as! TextTableViewCell).tweetBody.enabledTextCheckingTypes = NSTextCheckingType.Link.rawValue
             (cell as! TextTableViewCell).delegate = self
+            (cell as! TextTableViewCell).tweet = tweet
         } else {
             cell = tableView.dequeueReusableCellWithIdentifier("imageCell", forIndexPath: indexPath) as! ImageTableViewCell
-            (cell as! ImageTableViewCell).tweet = tweet
+            (cell as! ImageTableViewCell).tweetBody.enabledTextCheckingTypes = NSTextCheckingType.Link.rawValue
             (cell as! ImageTableViewCell).delegate = self
+            (cell as! ImageTableViewCell).tweet = tweet
         }
 
         // change the default margin of the table divider length

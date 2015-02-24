@@ -21,7 +21,7 @@ class TextTableViewCell: UITableViewCell {
     @IBOutlet weak var screenName: UILabel!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var createdAt: UILabel!
-    @IBOutlet weak var tweetBody: UILabel!
+    @IBOutlet weak var tweetBody: TTTAttributedLabel!
     @IBOutlet weak var favoriteCount: UILabel!
     @IBOutlet weak var retweetCount: UILabel!
 

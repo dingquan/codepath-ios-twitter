@@ -8,3 +8,4 @@
 #import <UIScrollView+SVInfiniteScrolling.h>
 //#import <UIScrollView+SVPullToRefresh.h>
 #import "NSDate+DateTools.h"
+#import "TTTAttributedLabel.h"

@@ -8,12 +8,12 @@
 
 import UIKit
 
-class TweetDetailViewController: UIViewController {
+class TweetDetailViewController: UIViewController, TTTAttributedLabelDelegate {
 
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var screenName: UILabel!
-    @IBOutlet weak var tweetBody: UILabel!
+    @IBOutlet weak var tweetBody: TTTAttributedLabel!
     @IBOutlet weak var tweetImage: UIImageView!
     @IBOutlet weak var createdAt: UILabel!
     @IBOutlet weak var retweetCnt: UILabel!
@@ -41,6 +41,9 @@ class TweetDetailViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController?.navigationBar.barStyle = UIBarStyle.Black
+        
+        self.tweetBody.delegate = self
+        self.tweetBody.enabledTextCheckingTypes = NSTextCheckingType.Link.rawValue
         loadTweet()
     }
     

@@ -16,7 +16,7 @@ class ImageTableViewCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var screenName: UILabel!
     @IBOutlet weak var createdAt: UILabel!
-    @IBOutlet weak var tweetBody: UILabel!
+    @IBOutlet weak var tweetBody: TTTAttributedLabel!
     @IBOutlet weak var tweetImage: UIImageView!
 
     @IBOutlet weak var retweetCount: UILabel!
