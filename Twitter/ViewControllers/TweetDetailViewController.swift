@@ -22,6 +22,8 @@ class TweetDetailViewController: UIViewController {
     @IBOutlet weak var replyIcon: UIButton!
     @IBOutlet weak var retweetIcon: UIButton!
 
+    @IBOutlet weak var tweetImageHeightConstraint: NSLayoutConstraint!
+
     var tweet:Tweet?
     var forIndexPath: NSIndexPath?
     var dateFormatter:NSDateFormatter!
@@ -76,6 +78,7 @@ class TweetDetailViewController: UIViewController {
             ImageHelpers.roundedCorner(self.tweetImage)
             ImageHelpers.fadeInImage(self.profileImage, imgUrl: tweet.user?.profileImageUrl)
             if tweet.imageUrl != nil{
+                tweetImageHeightConstraint.constant = 200
                 ImageHelpers.fadeInImage(self.tweetImage, imgUrl: tweet.imageUrl!)
             }
         }

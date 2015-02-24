@@ -48,7 +48,7 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
             tweetBody.text = placeHolderText
         } else {
             tweetBody.text = "@\(inReplyToTweet!.user!.screenName!) "
-            tweetBody.selectedRange = NSRange(location: tweetBody!.text!.utf16Count, length: 0)
+            tweetBody.selectedRange = NSRange(location: count(tweetBody!.text!.utf16), length: 0)
         }
         tweetBody.textColor = UIColor.grayColor()
         
@@ -92,7 +92,7 @@ class NewTweetViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(textView: UITextView) {
-        let remaining = 140 - tweetBody.text.utf16Count
+        let remaining = 140 - count(tweetBody.text.utf16)
         UIView.setAnimationsEnabled(false)
         if remaining < 20 {
             tweetCountBarItem.tintColor = UIColor.redColor()
